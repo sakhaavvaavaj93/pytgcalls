@@ -8,7 +8,7 @@ class GetActiveCall(Scaffold):
     ):
         """Check/Get an active call
 
-        This method check if is active an Group Call (Playing / Paused),
+        This method check if is active a Group Call (Playing / Paused),
         if not, this can raise an error
 
         Parameters:

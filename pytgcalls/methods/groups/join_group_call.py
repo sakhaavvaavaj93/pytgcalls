@@ -1,6 +1,7 @@
 import asyncio
 import logging
 import shlex
+from typing import Union
 
 from ...exceptions import AlreadyJoinedError
 from ...exceptions import InvalidStreamMode
@@ -9,6 +10,7 @@ from ...exceptions import NodeJSNotRunning
 from ...exceptions import NoMtProtoClientSet
 from ...exceptions import TelegramServerError
 from ...file_manager import FileManager
+from ...mtproto import BridgedClient
 from ...scaffold import Scaffold
 from ...stream_type import StreamType
 from ...types import AlreadyJoined
@@ -30,7 +32,7 @@ py_logger = logging.getLogger('pytgcalls')
 class JoinGroupCall(Scaffold):
     async def join_group_call(
         self,
-        chat_id: int,
+        chat_id: Union[int, str],
         stream: InputStream,
         invite_hash: str = None,
         join_as=None,
@@ -42,8 +44,9 @@ class JoinGroupCall(Scaffold):
         Group Calls
 
         Parameters:
-            chat_id (``int``):
-                Unique identifier (int) of the target chat.
+            chat_id (``int`` | ``str``):
+                Unique identifier of the target chat.
+                Can be a direct id (int) or a username (str)
             stream (:obj:`~pytgcalls.types.InputStream()`):
                 Input Streams descriptor, can be used also
                 :obj:`~pytgcalls.types.AudioPiped()`,
@@ -67,20 +70,20 @@ class JoinGroupCall(Scaffold):
             NoActiveGroupCall: In case you try
                 to edit a not started group call
             FileNotFoundError: In case you try
-                a non existent file
+                a non-existent file
             InvalidStreamMode: In case you try
                 to set a void stream mode
             FFmpegNotInstalled: In case you try
-                to use the Piped input stream and
+                to use the Piped input stream, and
                 you don't have ffmpeg installed
             NoAudioSourceFound: In case you try
                 to play an audio file from a file
                 without the sound
             NoVideoSourceFound: In case you try
-                to play an video file from a file
+                to play a video file from a file
                 without the video
             InvalidVideoProportion: In case you try
-                to play an video without correct
+                to play a video without correct
                 proportions
             AlreadyJoinedError: In case you try
                 to join in already joined group
@@ -117,6 +120,9 @@ class JoinGroupCall(Scaffold):
             stream_type = StreamType().local_stream
         if stream_type.stream_mode == 0:
             raise InvalidStreamMode()
+        chat_id = BridgedClient.chat_id(
+            await self._app.resolve_peer(chat_id)
+        )
         self._cache_user_peer.put(chat_id, join_as)
         headers = None
         if isinstance(

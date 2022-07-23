@@ -105,10 +105,9 @@ class Binding:
         user_id: int,
     ):
         if self._js_process is None:
-            sep = os.path.sep
             self._js_process = await asyncio.create_subprocess_exec(
                 'node',
-                f'{self._run_folder}dist{sep}index.js',
+                os.path.join(self._run_folder, 'dist', 'index.js'),
                 stdout=subprocess.PIPE,
                 stdin=subprocess.PIPE,
             )

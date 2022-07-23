@@ -1,5 +1,5 @@
 import json
-from typing import Callable
+from typing import Callable, Union
 from typing import Dict
 from typing import Optional
 
@@ -385,7 +385,7 @@ class TelethonClient(BridgedClient):
 
     async def resolve_peer(
         self,
-        user_id: int,
+        user_id: Union[int, str],
     ) -> TypeInputPeer:
         return await self._app.get_input_entity(user_id)
 

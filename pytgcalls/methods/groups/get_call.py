@@ -8,7 +8,7 @@ class GetCall(Scaffold):
     ):
         """Check/Get an existent group call
 
-        This method check if exist an Group Call,
+        This method check if exist a Group Call,
         if not, this can raise an error
 
         Parameters:

@@ -1,5 +1,5 @@
 import json
-from typing import Callable
+from typing import Callable, Union
 from typing import Dict
 from typing import Optional
 
@@ -414,7 +414,7 @@ class PyrogramClient(BridgedClient):
 
     async def resolve_peer(
         self,
-        user_id: int,
+        user_id: Union[int, str],
     ) -> InputPeer:
         return await self._app.resolve_peer(user_id)
 
