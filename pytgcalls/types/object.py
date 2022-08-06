@@ -3,6 +3,8 @@ from .groups import ErrorDuringJoin
 from .groups import JoinedVoiceChat
 from .groups import LeftVoiceChat
 from .groups import NotInGroupCall
+from .groups import UpgradeNeeded
+from .stream import StreamTime
 from .stream import ChangedStream
 from .stream import MutedStream
 from .stream import PausedStream
@@ -40,3 +42,7 @@ class Object:
             return MutedStream(chat_id)
         elif event_name == 'UNMUTED_STREAM':
             return UnMutedStream(chat_id)
+        elif event_name == 'APP_UPGRADE_NEEDED':
+            return UpgradeNeeded(chat_id)
+        elif event_name == 'PLAYED_TIME':
+            return StreamTime(data['time'])

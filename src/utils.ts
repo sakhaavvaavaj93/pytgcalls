@@ -1,4 +1,9 @@
 import {Commands, CommandsInfo, Sdp} from './types';
+import {getRandomValues} from 'crypto';
+
+export const second = <T>(_: any, s: T) => s;
+
+export const uuid = (t=21) => getRandomValues(new Uint8Array(t)).reduce(((t,e)=>t+=(e&=63)<36?e.toString(36):e<62?(e-26).toString(36).toUpperCase():e>62?"-":"_"),"");
 
 export function parseSdp(sdp: string): Sdp {
     let lines = sdp.split('\r\n');
@@ -6,7 +11,7 @@ export function parseSdp(sdp: string): Sdp {
     let lookup = (prefix: string) => {
         for (let line of lines) {
             if (line.startsWith(prefix)) {
-                return line.substr(prefix.length);
+                return line.substring(prefix.length);
             }
         }
         return null;
@@ -76,4 +81,11 @@ export function getBuiltSingleCommands(stringCommand: string): CommandsInfo {
         middle: listMiddleCmd,
         after: listAfterCmd,
     };
+}
+
+export enum LogLevel {
+    DEBUG = 1,
+    INFO,
+    WARNING,
+    ERROR,
 }

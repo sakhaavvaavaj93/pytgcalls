@@ -8,6 +8,7 @@ from .left_group_call_participant import LeftGroupCallParticipant
 from .left_voice_chat import LeftVoiceChat
 from .not_in_group_call import NotInGroupCall
 from .updated_group_call_participant import UpdatedGroupCallParticipant
+from .upgrade_needed import UpgradeNeeded
 
 __all__ = (
     'AlreadyJoined',
@@ -20,4 +21,5 @@ __all__ = (
     'LeftVoiceChat',
     'NotInGroupCall',
     'UpdatedGroupCallParticipant',
+    'UpgradeNeeded',
 )

@@ -6,7 +6,7 @@ from typing import Dict
 from typing import List
 from typing import Optional
 
-from .exceptions import FFmpegNotInstalled
+from .exceptions import FFMpegNotInstalled
 from .exceptions import InvalidVideoProportion
 from .exceptions import NoAudioSourceFound
 from .exceptions import NoVideoSourceFound
@@ -104,4 +104,4 @@ class FFprobe:
             if have_video:
                 return original_width, original_height, have_header
         except FileNotFoundError:
-            raise FFmpegNotInstalled(path)
+            raise FFMpegNotInstalled(path)

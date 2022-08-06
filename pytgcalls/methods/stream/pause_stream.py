@@ -1,8 +1,10 @@
 import asyncio
+from typing import Union
 
 from ...exceptions import NodeJSNotRunning
 from ...exceptions import NoMtProtoClientSet
 from ...exceptions import NotInGroupCallError
+from ...mtproto import BridgedClient
 from ...scaffold import Scaffold
 from ...types import NotInGroupCall
 from ...types.session import Session
@@ -11,15 +13,16 @@ from ...types.session import Session
 class PauseStream(Scaffold):
     async def pause_stream(
         self,
-        chat_id: int,
+        chat_id: Union[int, str],
     ):
         """Pause the playing stream
 
         This method allow to pause the streaming file
 
         Parameters:
-            chat_id (``int``):
-                Unique identifier (int) of the target chat.
+            chat_id (``int`` | ``str``):
+                Unique identifier of the target chat.
+                Can be a direct id (int) or a username (str)
 
         Raises:
             NoMtProtoClientSet: In case you try
@@ -53,6 +56,9 @@ class PauseStream(Scaffold):
 
                 idle()
         """
+        chat_id = BridgedClient.chat_id(
+            await self._app.resolve_peer(chat_id)
+        )
         if self._app is not None:
             if self._wait_until_run is not None:
                 solver_id = Session.generate_session_id(24)

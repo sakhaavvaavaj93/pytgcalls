@@ -1,23 +1,22 @@
 import asyncio
 from typing import Union
 
-from ...exceptions import NodeJSNotRunning
-from ...exceptions import NoMtProtoClientSet
-from ...exceptions import NotInGroupCallError
+from ...exceptions import NodeJSNotRunning, NoMtProtoClientSet, NotInGroupCallError
 from ...mtproto import BridgedClient
 from ...scaffold import Scaffold
 from ...types import NotInGroupCall
 from ...types.session import Session
+from ...types.stream import StreamTime
 
 
-class UnMuteStream(Scaffold):
-    async def unmute_stream(
+class PlayedTime(Scaffold):
+    async def played_time(
         self,
         chat_id: Union[int, str],
     ):
-        """UnMute the userbot
+        """Get the played time of the stream
 
-        This method allow to unmute the userbot via MtProto APIs
+        This method allow to get the played time of the stream
 
         Parameters:
             chat_id (``int`` | ``str``):
@@ -30,27 +29,8 @@ class UnMuteStream(Scaffold):
             NodeJSNotRunning: In case you try
                 to call this method without do
                 :meth:`~pytgcalls.PyTgCalls.start` before
-            NotInGroupCallError: In case you try
-                to leave a non-joined group call
-
-        Example:
-            .. code-block:: python
-                :emphasize-lines: 10-12
-
-                from pytgcalls import Client
-                from pytgcalls import idle
-                ...
-
-                app = PyTgCalls(client)
-                app.start()
-
-                ...  # Call API methods
-
-                app.unmute_stream(
-                    -1001185324811,
-                )
-
-                idle()
+            NoActiveGroupCall: In case you try
+                to edit a not started group call
         """
         chat_id = BridgedClient.chat_id(
             await self._app.resolve_peer(chat_id)
@@ -62,17 +42,21 @@ class UnMuteStream(Scaffold):
                 async def internal_sender():
                     if not self._wait_until_run.done():
                         await self._wait_until_run
-                    await self._binding.send({
-                        'action': 'unmute_stream',
+                    request = {
+                        'action': 'played_time',
                         'chat_id': chat_id,
                         'solver_id': solver_id,
-                    })
+                    }
+                    await self._binding.send(request)
+
                 asyncio.ensure_future(internal_sender())
                 result = await self._wait_result.wait_future_update(
                     solver_id,
                 )
                 if isinstance(result, NotInGroupCall):
                     raise NotInGroupCallError()
+                elif isinstance(result, StreamTime):
+                    return result.time
             else:
                 raise NodeJSNotRunning()
         else:

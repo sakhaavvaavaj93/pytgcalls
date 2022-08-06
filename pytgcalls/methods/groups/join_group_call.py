@@ -9,6 +9,7 @@ from ...exceptions import NoActiveGroupCall
 from ...exceptions import NodeJSNotRunning
 from ...exceptions import NoMtProtoClientSet
 from ...exceptions import TelegramServerError
+from ...exceptions import RTMPStreamNeeded
 from ...file_manager import FileManager
 from ...mtproto import BridgedClient
 from ...scaffold import Scaffold
@@ -19,6 +20,7 @@ from ...types import CaptureAVDesktop
 from ...types import CaptureAVDeviceDesktop
 from ...types import CaptureVideoDesktop
 from ...types import ErrorDuringJoin
+from ...types import UpgradeNeeded
 from ...types.input_stream import AudioPiped
 from ...types.input_stream import AudioVideoPiped
 from ...types.input_stream import InputStream
@@ -73,7 +75,7 @@ class JoinGroupCall(Scaffold):
                 a non-existent file
             InvalidStreamMode: In case you try
                 to set a void stream mode
-            FFmpegNotInstalled: In case you try
+            FFMpegNotInstalled: In case you try
                 to use the Piped input stream, and
                 you don't have ffmpeg installed
             NoAudioSourceFound: In case you try
@@ -272,6 +274,8 @@ class JoinGroupCall(Scaffold):
                         raise AlreadyJoinedError()
                     elif isinstance(result, ErrorDuringJoin):
                         raise TelegramServerError()
+                    elif isinstance(result, UpgradeNeeded):
+                        raise RTMPStreamNeeded()
                 else:
                     raise NoActiveGroupCall()
             else:
