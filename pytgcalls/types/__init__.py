@@ -8,6 +8,7 @@ from .groups import JoinedGroupCallParticipant
 from .groups import JoinedVoiceChat
 from .groups import LeftGroupCallParticipant
 from .groups import LeftVoiceChat
+from .groups import MutedCall
 from .groups import NotInGroupCall
 from .groups import UpdatedGroupCallParticipant
 from .groups import UpgradeNeeded
@@ -82,4 +83,5 @@ __all__ = (
     'VideoParameters',
     'VideoPiped',
     'UpgradeNeeded',
+    'MutedCall',
 )

@@ -4,7 +4,7 @@ import {Binding} from "./binding";
 import {BufferOptimized} from "./buffer_optimized";
 import {getBuiltCommands, LogLevel} from "./utils";
 
-export class FFmpegReader {
+export class FFMpegReader {
     private fifo_reader?: ChildProcessWithoutNullStreams;
     private total_size: number = 0;
     private bytes_read: BufferOptimized;

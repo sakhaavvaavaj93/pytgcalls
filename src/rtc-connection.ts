@@ -1,6 +1,6 @@
 import { Stream, TGCalls } from './tgcalls';
 import {Binding, MultiCoreBinding} from './binding';
-import {FFmpegReader} from "./ffmpeg_reader";
+import {FFMpegReader} from "./ffmpeg_reader";
 import {FileReader} from "./file_reader";
 import {LogLevel} from "./utils";
 
@@ -11,8 +11,8 @@ export class RTCConnection {
     private almostFinished: number = 0;
     private almostRestarted: number = 0;
     private almostMaxFinished: number = 0;
-    private waitingAudioReadable?: FFmpegReader | FileReader = undefined;
-    private waitingVideoReadable?: FFmpegReader | FileReader = undefined;
+    private waitingAudioReadable?: FFMpegReader | FileReader = undefined;
+    private waitingVideoReadable?: FFMpegReader | FileReader = undefined;
 
     constructor(
         public chatId: number,
@@ -30,7 +30,7 @@ export class RTCConnection {
         let audioReadable;
         if(audioParams !== undefined){
             if(fileAudioPath.startsWith('fifo://') || fileAudioPath.startsWith('device://')){
-                audioReadable = new FFmpegReader(audioParams.ffmpeg_parameters);
+                audioReadable = new FFMpegReader(audioParams.ffmpeg_parameters);
                 audioReadable.convert_audio(
                     fileAudioPath,
                     audioParams.bitrate,
@@ -44,7 +44,7 @@ export class RTCConnection {
         let videoReadable;
         if(videoParams !== undefined){
             if(fileVideoPath.startsWith('fifo://') || fileVideoPath.startsWith('screen://')){
-                videoReadable = new FFmpegReader(videoParams.ffmpeg_parameters);
+                videoReadable = new FFMpegReader(videoParams.ffmpeg_parameters);
                 videoReadable.convert_video(
                     fileVideoPath,
                     videoParams.width,
@@ -141,7 +141,7 @@ export class RTCConnection {
                 }
             }
         });
-        this.audioStream.on('restarted', async (readable?: FFmpegReader | FileReader) => {
+        this.audioStream.on('restarted', async (readable?: FFMpegReader | FileReader) => {
             this.almostRestarted += 1;
             this.waitingAudioReadable = readable;
             if(this.almostRestarted === 2){
@@ -150,7 +150,7 @@ export class RTCConnection {
                 this.videoStream.setReadable(this.waitingVideoReadable);
             }
         });
-        this.videoStream.on('restarted', async (readable?: FFmpegReader | FileReader) => {
+        this.videoStream.on('restarted', async (readable?: FFMpegReader | FileReader) => {
             this.almostRestarted += 1;
             this.waitingVideoReadable = readable;
             if(this.almostRestarted === 2){
@@ -300,7 +300,7 @@ export class RTCConnection {
         }
         if(audioParams != undefined){
             if(audioParams.path.startsWith('fifo://') || audioParams.path.startsWith('device://')){
-                audioReadable = new FFmpegReader(audioParams.ffmpeg_parameters);
+                audioReadable = new FFMpegReader(audioParams.ffmpeg_parameters);
                 audioReadable.convert_audio(
                     audioParams.path,
                     audioParams.bitrate,
@@ -314,7 +314,7 @@ export class RTCConnection {
         let videoReadable;
         if(videoParams != undefined){
             if(videoParams.path.startsWith('fifo://') || videoParams.path.startsWith('screen://')){
-                videoReadable = new FFmpegReader(videoParams.ffmpeg_parameters);
+                videoReadable = new FFMpegReader(videoParams.ffmpeg_parameters);
                 videoReadable.convert_video(
                     videoParams.path,
                     videoParams.width,

@@ -64,7 +64,7 @@ export function getBuiltCommands(stringCommand: string): Commands {
 }
 
 export function getBuiltSingleCommands(stringCommand: string): CommandsInfo {
-    let beforeCmd = stringCommand.split('-atmid')[0].split('-atend')[0];
+    const beforeCmd = stringCommand.split('-atmid')[0].split('-atend')[0];
     let middleCmd = '';
     let afterCmd = '';
     if (stringCommand.includes('-atmid')) {
@@ -73,14 +73,20 @@ export function getBuiltSingleCommands(stringCommand: string): CommandsInfo {
     if (stringCommand.includes('-atend')) {
         afterCmd = stringCommand.split('-atend')[1].split('-atmid')[0];
     }
-    let listBeforeCmd = beforeCmd.split(':_cmd_:').filter(e =>  e);
-    let listMiddleCmd = middleCmd.split(':_cmd_:').filter(e =>  e);
-    let listAfterCmd = afterCmd.split(':_cmd_:').filter(e =>  e);
     return {
-        before: listBeforeCmd,
-        middle: listMiddleCmd,
-        after: listAfterCmd,
+        before: beforeCmd.split(':_cmd_:').filter(e =>  e),
+        middle: middleCmd.split(':_cmd_:').filter(e =>  e),
+        after: afterCmd.split(':_cmd_:').filter(e =>  e),
     };
+}
+
+export function getErrorMessage(error: string): string {;
+    if (error.includes('APP_UPGRADE_NEEDED')) {
+        return 'APP_UPGRADE_NEEDED';
+    } else if (error.includes('No transport') || error.includes('UNMUTE_NEEDED')) {
+        return 'UNMUTE_NEEDED';
+    }
+    return 'JOIN_ERROR';
 }
 
 export enum LogLevel {

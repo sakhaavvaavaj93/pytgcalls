@@ -45,7 +45,7 @@ class GetParticipants(Scaffold):
                 idle()
         """
         chat_id = BridgedClient.chat_id(
-            await self._app.resolve_peer(chat_id)
+            await self._app.resolve_peer(chat_id),
         )
         self._call_holder.get_call(
             chat_id,

@@ -8,8 +8,9 @@ from ...exceptions import InvalidStreamMode
 from ...exceptions import NoActiveGroupCall
 from ...exceptions import NodeJSNotRunning
 from ...exceptions import NoMtProtoClientSet
-from ...exceptions import TelegramServerError
 from ...exceptions import RTMPStreamNeeded
+from ...exceptions import TelegramServerError
+from ...exceptions import UnMuteNeeded
 from ...file_manager import FileManager
 from ...mtproto import BridgedClient
 from ...scaffold import Scaffold
@@ -20,6 +21,7 @@ from ...types import CaptureAVDesktop
 from ...types import CaptureAVDeviceDesktop
 from ...types import CaptureVideoDesktop
 from ...types import ErrorDuringJoin
+from ...types import MutedCall
 from ...types import UpgradeNeeded
 from ...types.input_stream import AudioPiped
 from ...types.input_stream import AudioVideoPiped
@@ -93,6 +95,11 @@ class JoinGroupCall(Scaffold):
             TelegramServerError: Error occurred when
                 joining to a group call (
                 Telegram Server Side)
+            RTMPStreamNeeded: In case you try
+                to join a group call without
+                a RTMP stream
+            UnMuteNeeded: In case you try
+                to play on a muted group call
 
         Example:
             .. code-block:: python
@@ -123,7 +130,7 @@ class JoinGroupCall(Scaffold):
         if stream_type.stream_mode == 0:
             raise InvalidStreamMode()
         chat_id = BridgedClient.chat_id(
-            await self._app.resolve_peer(chat_id)
+            await self._app.resolve_peer(chat_id),
         )
         self._cache_user_peer.put(chat_id, join_as)
         headers = None
@@ -276,6 +283,8 @@ class JoinGroupCall(Scaffold):
                         raise TelegramServerError()
                     elif isinstance(result, UpgradeNeeded):
                         raise RTMPStreamNeeded()
+                    elif isinstance(result, MutedCall):
+                        raise UnMuteNeeded()
                 else:
                     raise NoActiveGroupCall()
             else:

@@ -223,7 +223,7 @@ class NoVideoSourceFound(Exception):
 
 
 class InvalidVideoProportion(Exception):
-    """FFmpeg have sent invalid video measure
+    """FFMpeg have sent invalid video measure
     response, raised by
     :meth:`~pytgcalls.PyTgCalls.join_group_call` or
     :meth:`~pytgcalls.PyTgCalls.change_stream`
@@ -255,7 +255,7 @@ class FFMpegNotInstalled(Exception):
 
     def __init__(self, path: str):
         super().__init__(
-            'FFmpeg ins\'t installed on your server',
+            'FFMpeg ins\'t installed on your server',
         )
 
 
@@ -267,4 +267,15 @@ class RTMPStreamNeeded(Exception):
     def __init__(self):
         super().__init__(
             'Needed an RTMP Stream',
+        )
+
+
+class UnMuteNeeded(Exception):
+    """Needed to unmute the userbot, raised by
+    :meth:`~pytgcalls.PyTgCalls.join_group_call`
+    """
+
+    def __init__(self):
+        super().__init__(
+            'Needed to unmute the userbot',
         )

@@ -2,7 +2,7 @@ import {RTCConnection} from './rtc-connection';
 import { Binding } from './binding';
 import * as process from "process";
 import {isMainThread} from "worker_threads";
-import {LogLevel} from "./utils";
+import {getErrorMessage, LogLevel} from "./utils";
 
 if (isMainThread) {
     const binding = new Binding();
@@ -41,10 +41,9 @@ if (isMainThread) {
                         });
                     } catch (error: any) {
                         connections.delete(data.chat_id);
-                        let errorMessage = error.toString();
                         await binding.sendUpdate({
                             action: 'update_request',
-                            result: errorMessage.includes('APP_UPGRADE_NEEDED') ? 'APP_UPGRADE_NEEDED':'JOIN_ERROR',
+                            result: getErrorMessage(error.message),
                             chat_id: data.chat_id,
                             solver_id: data.solver_id,
                         });

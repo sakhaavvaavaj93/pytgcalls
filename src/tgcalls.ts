@@ -1,7 +1,7 @@
 import { EventEmitter } from 'events';
 import { RTCPeerConnection } from 'wrtc';
 import { SdpBuilder } from './sdp-builder';
-import {LogLevel, uuid, parseSdp, second} from './utils';
+import {LogLevel, uuid, parseSdp, second, getErrorMessage} from './utils';
 import {Conference, JoinVoiceCallCallback, JoinVoiceCallResponse, Sdp} from './types';
 import {Binding} from './binding';
 
@@ -110,8 +110,11 @@ export class TGCalls<T> extends EventEmitter {
         }).then(answer => {
             if(!answer || !answer.transport) {
                 conn.close();
-                if (answer.error && answer.error.includes("APP_UPGRADE_NEEDED")) {
-                    throw new Error('APP_UPGRADE_NEEDED');
+                if (answer.error) {
+                    const messageError = getErrorMessage(answer.error);
+                    if (messageError != 'JOIN_ERROR') {
+                        throw new Error(messageError);
+                    }
                 }
                 throw new Error('No active voice chat found on ' + this.#params.chatId);
             }

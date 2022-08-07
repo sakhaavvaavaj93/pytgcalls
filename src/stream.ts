@@ -2,7 +2,7 @@ import { EventEmitter } from 'events';
 import {RTCAudioSource, nonstandard, RTCVideoSource} from 'wrtc';
 import { Binding } from './binding';
 import {RemoteLaggingCallback, RemotePlayingTimeCallback} from "./types";
-import {FFmpegReader} from "./ffmpeg_reader";
+import {FFMpegReader} from "./ffmpeg_reader";
 import {FileReader} from "./file_reader";
 import {BufferOptimized} from "./buffer_optimized";
 import * as os from "os";
@@ -39,7 +39,7 @@ export class Stream extends EventEmitter {
     remoteLagging?: RemoteLaggingCallback;
 
     constructor(
-        public readable?: FFmpegReader | FileReader,
+        public readable?: FFMpegReader | FileReader,
         readonly bitsPerSample: number = 16,
         public sampleRate: number = 48000,
         readonly channelCount: number = 1,
@@ -68,7 +68,7 @@ export class Stream extends EventEmitter {
         this.overloadQuiet = status;
     }
 
-    setReadable(readable?: FFmpegReader | FileReader) {
+    setReadable(readable?: FFMpegReader | FileReader) {
         this.finished = true;
         this.finishedLoading = false;
         this.bytesLoaded = 0;
@@ -198,7 +198,7 @@ export class Stream extends EventEmitter {
         this.finish();
         this.stopped = true;
     }
-    restart(readable?: FFmpegReader | FileReader) {
+    restart(readable?: FFMpegReader | FileReader) {
         this.stopped = true;
         setTimeout(() => {
             if(this.stopped_done){

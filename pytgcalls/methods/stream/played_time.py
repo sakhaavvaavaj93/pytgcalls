@@ -1,7 +1,9 @@
 import asyncio
 from typing import Union
 
-from ...exceptions import NodeJSNotRunning, NoMtProtoClientSet, NotInGroupCallError
+from ...exceptions import NodeJSNotRunning
+from ...exceptions import NoMtProtoClientSet
+from ...exceptions import NotInGroupCallError
 from ...mtproto import BridgedClient
 from ...scaffold import Scaffold
 from ...types import NotInGroupCall
@@ -33,7 +35,7 @@ class PlayedTime(Scaffold):
                 to edit a not started group call
         """
         chat_id = BridgedClient.chat_id(
-            await self._app.resolve_peer(chat_id)
+            await self._app.resolve_peer(chat_id),
         )
         if self._app is not None:
             if self._wait_until_run is not None:

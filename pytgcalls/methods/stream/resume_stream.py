@@ -57,7 +57,7 @@ class ResumeStream(Scaffold):
                 idle()
         """
         chat_id = BridgedClient.chat_id(
-            await self._app.resolve_peer(chat_id)
+            await self._app.resolve_peer(chat_id),
         )
         if self._app is not None:
             if self._wait_until_run is not None:
