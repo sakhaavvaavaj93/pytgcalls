@@ -30,7 +30,7 @@ class CaptureVideoDesktop(InputStream):
         screen_info: ScreenInfo,
         video_parameters: VideoParameters = VideoParameters(),
     ):
-        self._path = screen_info.buildFFMpegCommand(
+        self._path = screen_info.build_ffmpeg_command(
             video_parameters.frame_rate,
         )
         self.ffmpeg_parameters: str = screen_info.ffmpeg_parameters
